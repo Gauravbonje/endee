@@ -33,3 +33,6 @@ frontend/*
 projects/codebuddy/venv/
 __pycache__/
 *.pyc
+projects/codebuddy/venv/
+__pycache__/
+*.pyc
