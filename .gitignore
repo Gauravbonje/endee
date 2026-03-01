@@ -30,3 +30,6 @@ frontend/*
 
 # DS Store
 .DS_Store
+projects/codebuddy/venv/
+__pycache__/
+*.pyc
