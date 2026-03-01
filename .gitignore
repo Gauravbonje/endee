@@ -36,3 +36,14 @@ __pycache__/
 projects/codebuddy/venv/
 __pycache__/
 *.pyc
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac
+.DS_Store
+
+# Endee build
+build/
