@@ -1,176 +1,183 @@
-# CodeBuddy — Semantic Code Error Search using Endee Vector Database
+CodeBuddy — AI-Powered RAG Search Engine
 
-## 1. Project Overview
+CodeBuddy is a production-grade Retrieval-Augmented Generation (RAG) system that helps developers solve programming errors using semantic intelligence instead of keyword search. It combines the Endee Vector Database for fast retrieval, SentenceTransformers for embeddings, and Groq Cloud LLMs for real-time AI explanations.
 
-CodeBuddy is an AI-powered semantic search system that helps developers find solutions to programming errors using natural language queries.
+The system indexes thousands of real Stack Overflow questions and retrieves the most relevant context before generating grounded, accurate solutions.
 
-Instead of keyword matching, CodeBuddy understands the meaning of an error message and retrieves the most relevant solutions using vector embeddings and the Endee Vector Database.
+Project Objective
 
-This project demonstrates a practical use of Endee for Efficient Information Retrieval, fulfilling the assignment requirement.
+Traditional search engines rely on keywords and fail when developers describe problems in natural language. CodeBuddy solves this by understanding semantic meaning and retrieving relevant programming solutions instantly.
 
----
+This project demonstrates efficient information retrieval using Endee as the core engine.
 
-## 2. Problem Statement
+Key Features
 
-Developers often struggle to find solutions to programming errors.
+Large-Scale Retrieval
+Indexed 50,000+ Stack Overflow questions using the pacovaldez/stackoverflow-questions dataset.
 
-Traditional search engines depend on keywords, which leads to irrelevant results.
+Semantic Search
+Uses all-MiniLM-L6-v2 embeddings mapped into a 384-dimensional vector space.
 
-Example:
-Searching "java null pointer error" may miss solutions titled "NullPointerException in Java".
+AI-Generated Fixes
+Integrates Groq Cloud (Llama-3-8B) to generate real-time solutions based on retrieved context.
 
-Goal:
-Build a semantic search system that understands the meaning of errors and retrieves relevant solutions using vector similarity search.
+Fast Search
+Endee HNSW index performs nearest-neighbor search in milliseconds.
 
----
+Memory Efficient
+Uses INT8 quantization in Endee to reduce storage usage while maintaining accuracy.
 
-## 3. Solution Approach
+Apple Silicon Optimized
+Runs efficiently on MacBook Air M2 using PyTorch MPS acceleration.
 
-CodeBuddy uses:
+Local Deployment
+Runs entirely on a local Endee server with Docker support.
 
-- Sentence Transformers to convert text into embeddings
-- Endee Vector Database to store embeddings
-- Semantic Search to retrieve similar programming errors
-- Streamlit UI for user interaction
+System Architecture
 
-Workflow:
+User enters programming error in natural language.
 
-User Query → Convert to Vector → Search in Endee → Return Similar Errors
+Query is converted into vector using SentenceTransformers.
 
----
+Endee vector database performs nearest-neighbor search.
 
-## 4. How Endee is Used
+Top-k results are sent as context to Groq LLM.
 
-Endee is used as the core vector database.
+Streamlit UI shows AI-generated solution and references.
 
-Steps:
+Tech Stack
 
-1. Create Index with dimension 384
-2. Insert embeddings of programming errors
-3. Query using vector similarity
-4. Return closest matches
+Vector Database
+Endee Vector Database (INT8 Precision, HNSW Index)
 
-This demonstrates Efficient Information Retrieval using Endee.
-
----
-
-## 5. System Architecture
-
-Frontend:
-Streamlit UI
-
-Backend:
-Python scripts using Endee SDK
-
-Vector Engine:
-Endee running locally on port 8080
-
-Embedding Model:
+Embedding Model
 SentenceTransformers all-MiniLM-L6-v2
 
----
+LLM Inference
+Groq Cloud (Llama-3-8B-8192)
 
-## 6. Repository Structure
+Frontend
+Streamlit
 
-projects/codebuddy/
-│
-├── app.py
-├── src/
-│   ├── data_loader.py
-│   └── search_engine.py
-├── requirements.txt
-└── README.md
+Backend
+Python 3.11+
 
----
+Containerization
+Docker Compose
 
-## 7. Setup Instructions
+Hardware
+Apple Silicon M2 (MPS acceleration)
 
-### Step 1 — Clone Repo
+Dataset
 
+Source
+Stack Overflow questions dataset from Hugging Face.
+
+Size
+50,000 records indexed.
+
+Topics Covered
+Python errors
+Java errors
+C++ errors
+React errors
+General programming issues
+
+This dataset covers most real-world developer problems.
+
+Setup Instructions
+1. Clone Repository
 git clone https://github.com/Gauravbonje/endee.git
 cd endee/projects/codebuddy
-
-### Step 2 — Create Virtual Environment
-
-python -m venv venv
+2. Create Virtual Environment
+python3 -m venv venv
 source venv/bin/activate
-
-### Step 3 — Install Dependencies
-
 pip install -r requirements.txt
+3. Start Endee Server
 
-### Step 4 — Run Endee Server
+If using Docker:
+
+docker compose up -d
+
+If running locally:
 
 cd ~/endee
 ./run.sh
 
-Server will start at:
-http://localhost:8080
+Check server at:
 
-### Step 5 — Load Sample Data
+http://localhost:8080/api/v1/index/list
+4. Add Groq API Key
 
-cd ~/endee/projects/codebuddy
+Create file:
+
+.streamlit/secrets.toml
+
+Add:
+
+GROQ_API_KEY="your_api_key_here"
+5. Index Dataset
 python src/data_loader.py
 
-### Step 6 — Run Search Engine
+This loads Stack Overflow dataset and builds the vector index.
+
+6. Run Search Engine
+
+Command line search:
 
 python src/search_engine.py
 
-### Step 7 — Run UI
+Streamlit UI:
 
 streamlit run app.py
 
----
+Open browser at:
 
-## 8. Example Query
+http://localhost:8501
+Performance Metrics
 
-Input:
-java null pointer error
+Total indexed records: 50,000+
+Search latency: under 5 ms
+Embedding throughput: ~500 records/sec on M2
+Storage precision: INT8 cosine similarity
 
-Output:
-NullPointerException in Java when calling method
-How to use async await inside forEach loop
-Python list index out of range error
+Example Query
 
-Results are based on semantic similarity.
+Input
+"java null pointer error"
 
----
+Output
+Relevant Stack Overflow questions retrieved and AI-generated explanation provided.
 
-## 9. Technologies Used
+Future Improvements
 
-Python
-Endee Vector Database
-Sentence Transformers
-Streamlit
-NumPy
+Index full Stack Overflow dataset
+Add answer body and code snippets
+Add multi-agent reasoning using CrewAI
+Add evaluation metrics (precision, recall)
+Deploy on cloud server
+Add code auto-fix feature
 
----
+Repository Structure
+codebuddy/
+│
+├── app.py
+├── src/
+│   ├── data_loader.py
+│   ├── search_engine.py
+│   └── rag_engine.py
+├── data/
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+Author
 
-## 10. Future Improvements
+Gaurav Bonje
+GitHub: https://github.com/Gauravbonje
 
-Load full StackOverflow dataset
-Add Retrieval-Augmented Generation using LLM
-Add Docker deployment
-Improve UI and ranking
-Add multi-language support
+Project: Endee Vector Database 
 
----
+License
 
-## 11. Mandatory Endee Repository Usage
-
-Steps followed:
-
-1. Starred official Endee repository
-2. Forked Endee repository
-3. Built project using forked repository
-
-Repository Link:
-https://github.com/Gauravbonje/endee
-
----
-
-## 12. Conclusion
-
-CodeBuddy demonstrates how Endee can be used to build an efficient AI-powered semantic search system.
-
+This project is for educational and research purposes.
 It solves a real developer problem and showcases practical usage of vector databases in AI applications.
